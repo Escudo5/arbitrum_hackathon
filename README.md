@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Arbitrum Stylus Starter Template for C
 
 ## Register and Storage Slots
