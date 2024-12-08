@@ -2,13 +2,34 @@
 
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs"
 import { useRkAccountModal } from "@/lib/rainbowkit"
-import { useAccount } from "wagmi"
+import { useAccount, useReadContract } from "wagmi"
+import { parseAbi } from "viem"
+import Navigation from "./Navigation"
+import { Fragment } from "react"
+
+const ABI = parseAbi([
+  "function hola_caracola() public returns (string)",
+  ])
+
+const ADDRESS = "0x94a148916dd6eeaefddcc3044b6530aa20ce6ffb"
 
 export default function Container() {
+  const result = useReadContract({
+    address: ADDRESS,
+    functionName: "hola_caracola",
+    abi: ABI,
+  })
+
+  console.debug({result})
+
   const { openAccountModal } = useRkAccountModal()
   const { isConnected } = useAccount()
 
   return (
+    <Fragment>
+      <p>{result.data || "cargando..."}</p>
+    <>
+    <Navigation />
     <section className="max-w-2xl mt-12 mx-auto">
       <Tabs defaultValue="feed" className="w-full">
         <TabsList className="w-full p-0 border border-b-2 grid grid-cols-2">
@@ -48,5 +69,6 @@ export default function Container() {
         <TabsContent value="personal">My publications</TabsContent>
       </Tabs>
     </section>
+    </>
   )
 }
